@@ -1,0 +1,19 @@
+﻿{
+    "main": "index.html",
+    "name": "node-webkit-java sample",
+    "description": "node-webkit-java sample",
+    "version": "0.1.0",
+    "keywords": [ "node-webkit-java sample", "电子书" ],
+    "window": {
+        "title": "node-webkit-java sample",
+        "icon": "icon.png",
+        "toolbar": false,
+        "frame":true, 
+		"width": 800,
+        "height": 600,
+		"fullscreen": false
+     },
+    "webkit": {
+        "plugin": true
+    }
+}

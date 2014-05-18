@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>node-webkit  java sample</title>
+    <meta name="keywords"
+          content="node-webkit-java sample"/>
+    <meta name="description"
+          content="node-webkit-java sample"/>
+    <!-- 最新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap.min.css">
+
+    <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/css/bootstrap-theme.min.css">
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="http://cdn.bootcss.com/jquery/1.10.2/jquery.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="http://cdn.bootcss.com/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+
+
+</head>
+<body>
+<header class="titlebar"></header>
+<script>
+    var gui = require('nw.gui');
+    var win = gui.Window.get();
+    win.maximize();
+
+    win.on('close', function () {
+        exit();
+    });
+
+    function exit() {
+        stop();
+        gui.App.quit();
+    }
+    String.prototype.each = function (i, fun) {
+        var index = 0;
+        var that = this;
+        while (index <= that.length) {
+            (fun || function () {
+            })(that.substr(index, i))
+            index += i;
+        }
+    }
+
+    var exec = require('child_process').exec,
+            child;
+    var iconv = require('iconv-lite');
+    function start() {
+        child = exec('call root/start.bat', {encoding: 'hex'},
+                function (error, stdout, stderr) {
+
+                    var arr = [];
+                    stderr.each(2, function (data) {
+                        arr.push(parseInt(data, 16));
+                    });
+                    console.log(iconv.decode(new Buffer(arr), 'GBK'))
+
+                    console.log('stdout: ' + stdout);
+                    console.log('stderr: ' + stderr);
+                    if (error !== null) {
+                        console.log('exec error: ' + iconv.decode(error, 'utf-8'));
+                        console.log('exec error: ' + iconv.decode(error, 'gb2312'));
+                    }
+                });
+
+    }
+
+    function stop() {
+        child = exec('call root/stop.bat', {encoding: 'hex'},
+                function (error, stdout, stderr) {
+
+                    var arr = [];
+                    stderr.each(2, function (data) {
+                        arr.push(parseInt(data, 16));
+                    });
+                    console.log(iconv.decode(new Buffer(arr), 'GBK'))
+
+                    console.log('stdout: ' + stdout);
+                    console.log('stderr: ' + stderr);
+                    if (error !== null) {
+                        console.log('exec error: ' + iconv.decode(error, 'utf-8'));
+                        console.log('exec error: ' + iconv.decode(error, 'gb2312'));
+                    }
+                });
+    }
+
+    // Create an empty menu
+    var menu = new gui.Menu();
+
+    // Add some items
+
+
+    var aboutitem = new gui.MenuItem({label: '关于', click: function () {
+        window.location.href = 'https://github.com/cobola/node-webkit-java';
+    }});
+
+    menu.append(aboutitem);
+
+
+    menu.append(new gui.MenuItem({ type: 'separator' }));
+    var exititem = new gui.MenuItem({label: '退出', click: function () {
+        gui.App.quit();
+    }});
+
+
+    menu.append(exititem);
+
+    // Popup as context menu
+    // Popup as context menu
+    document.addEventListener('contextmenu', function (ev) {
+        ev.preventDefault();
+        // Popup at place you click
+        menu.popup(ev.x, ev.y);
+        return false;
+    }, false);
+
+
+    $(document).ready(function () {
+
+        start();
+        window.location.href = "app://whatever/check.html";
+    });
+
+
+    function restart() {
+        stop();
+        start();
+    }
+
+
+</script>
+
+<div class="row">
+    <div class="container" style="margin: 18em auto;text-align: center">
+
+        <img src="icon.png" width="64px" height="64px"/><br/><br/>
+        <h5>系统初始化中</h5><br/>
+        <img src="images/loading.gif" width="25px" height="25px"/>
+
+    </div>
+</div>
+
+</body>
+</html>
